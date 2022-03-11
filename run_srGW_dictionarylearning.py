@@ -226,7 +226,8 @@ if __name__ == '__main__':
                                 list_OT_validated.append(OT)
                                 list_loss_validated.append(loss) 
                             
-                            unmixings_validated = np.array([T.sum(axis=0) for T in list_OT_validated], dtype=np.float64)
+                            
+                            unmixings_validated = th.stack([T.sum(axis=0) for T in list_OT_validated]).detach().cpu().numpy().astype(np.float64)
                             np.save('%s/unmixings_validatedseeds%s.npy'%(full_path, val_nseeds), unmixings_validated )
                             np.save('%s/losses_unmixings_validatedseeds%s.npy'%(full_path, val_nseeds), np.array(list_loss_validated))
                                                     
