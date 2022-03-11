@@ -247,17 +247,17 @@ if __name__ == '__main__':
                                     N = C.shape[0]
                                     for local_seed in range(val_nseeds):
                                         
-                                        T_init = initializer_semirelaxed_GW(init_mode='random', p=h, N1=N, N2=Ntarget, seed=local_seed)
+                                        T_init = initializer_semirelaxed_GW(init_mode='random', p=h, N1=N, N2=Ntarget, seed=local_seed, dtype=dtype, device=device)
                                         local_OT,local_loss = method.srFGW_operator(C, F, method.masses[idx], method.Ctarget, method.Ftarget, T_init)
                                         if local_loss < loss:
                                             OT, loss = local_OT, local_loss                                                
                                     list_OT_validated.append(OT)
                                     list_loss_validated.append(loss) 
                                 
-                                    unmixings_validated = np.array([T.sum(axis=0) for T in list_OT_validated], dtype=np.float64)
-                                    np.save('%s/unmixings_validatedseeds%s.npy'%(full_path, val_nseeds), unmixings_validated )
-                                    np.save('%s/losses_unmixings_validatedseeds%s.npy'%(full_path, val_nseeds), np.array(list_loss_validated))
-                                                            
+                                unmixings_validated = np.array([T.sum(axis=0) for T in list_OT_validated], dtype=np.float64)
+                                np.save('%s/unmixings_validatedseeds%s.npy'%(full_path, val_nseeds), unmixings_validated )
+                                np.save('%s/losses_unmixings_validatedseeds%s.npy'%(full_path, val_nseeds), np.array(list_loss_validated))
+                                                        
                                 #if (not os.path.exists(str_SVCgraphs)) :
                                 print('running SVC on embedded graphs with best unmixings')
                                 Cbar = np.array(method.Ctarget.clone().detach().cpu().numpy(), dtype=np.float64)
